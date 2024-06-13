@@ -5,6 +5,7 @@ import {
   deleteSingleCarCarController,
   getAllCarCarController,
   getSingleCarCarController,
+  returnBookingController,
   updateSingleCarCarController,
 } from './car.controller';
 import { carSchemaWithZod } from './car.validation';
@@ -15,6 +16,7 @@ const router = Router();
 router.post('/',auth(USER_Role.admin), validateRequest(carSchemaWithZod), createCarController);
 router.get('/', getAllCarCarController);
 router.get('/:id', getSingleCarCarController);
+router.put('/return',auth(USER_Role.admin), returnBookingController);
 router.put('/:id',auth(USER_Role.admin), updateSingleCarCarController);
 router.delete('/:id',auth(USER_Role.admin), deleteSingleCarCarController);
 

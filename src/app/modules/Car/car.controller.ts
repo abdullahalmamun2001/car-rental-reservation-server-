@@ -1,4 +1,4 @@
-import  jwt  from 'jsonwebtoken';
+
 import httpStatus from 'http-status';
 import { catchAsync } from '../../utils/catchAsync';
 import { sendResponse } from '../../utils/sendResponse';
@@ -8,8 +8,9 @@ import {
   getSingleCarServices,
   updateSingleCarServices,
   deleteSingleCarServices,
+  carReturn,
 } from './car.service';
-import config from '../../config';
+
 
 export const createCarController = catchAsync(async (req, res) => {
   const carData = req.body;
@@ -41,7 +42,7 @@ export const getSingleCarCarController = catchAsync(async (req, res) => {
   });
 });
 export const updateSingleCarCarController = catchAsync(async (req, res) => {
-  console.log(req.headers.authorization);
+  console.log('mamun');
   const id = req.params.id;
   const data = req.body;
   const result = await updateSingleCarServices(id, data);
@@ -59,6 +60,16 @@ export const deleteSingleCarCarController = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Car Deleted successfully',
+    data: result,
+  });
+});
+export const returnBookingController = catchAsync(async (req, res) => {
+  const data = req.body;
+  const result = await carReturn(data);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Bookings Return successfully',
     data: result,
   });
 });

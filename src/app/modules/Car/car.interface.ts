@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 
 
 export type TCar={
@@ -10,3 +11,8 @@ export type TCar={
     status:'available' | 'unavailable';
     isDeleted:boolean;
 }
+
+export type TReturn={
+    bookingId:Types.ObjectId;
+    endTime:string;
+  }

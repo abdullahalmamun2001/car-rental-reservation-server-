@@ -17,7 +17,7 @@ export type TBooking = {
   totalCost: number;
   // isBooked: 'unconfirmed' | 'confirmed';
 };
-export type TReturn={
-  bookingId:string;
-  endTime:string;
-}
+// export type TReturn={
+//   bookingId:string;
+//   endTime:string;
+// }

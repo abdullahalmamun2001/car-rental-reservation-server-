@@ -9,7 +9,6 @@ export const carSchemaWithZod=z.object({
         features:z.array(z.string()),
         pricePerHour:z.number(),
         status:z.enum(['available', 'unavailable']).default("available"),
-        isDeleted:z.boolean(),
 
     })
 })

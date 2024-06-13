@@ -3,8 +3,7 @@ import { TUser, UserModel } from './user.interface';
 import bcrypt from 'bcrypt';
 import config from '../../config';
 
-
-const userSchema = new Schema<TUser,UserModel>(
+const userSchema = new Schema<TUser, UserModel>(
   {
     name: String,
     email: {
@@ -15,7 +14,7 @@ const userSchema = new Schema<TUser,UserModel>(
       type: String,
       enum: ['user', 'admin'],
     },
-    password: String,
+    password: { type: String, select: 0 },
     phone: String,
     address: String,
   },
@@ -42,7 +41,6 @@ userSchema.post('save', async function (doc, next) {
   doc.password = '';
   next();
 });
-
 
 userSchema.statics.isPasswordMatched = async function (
   newPassword,

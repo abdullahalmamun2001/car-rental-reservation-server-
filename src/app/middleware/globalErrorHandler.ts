@@ -6,6 +6,7 @@ import { handleValidationError } from '../errors/handleValidationError';
 import { handleCastError } from '../errors/handleCastError';
 import { AppError } from '../errors/AppError';
 import { handleDuplicateError } from '../errors/handleDuplicateError';
+import config from '../config';
 
 export const globalErrorHandler: ErrorRequestHandler = (
   err,
@@ -68,5 +69,6 @@ export const globalErrorHandler: ErrorRequestHandler = (
     success: false,
     message,
     errorSources,
+    stack: config.node_env === 'development' ? err?.stack : null,
   });
 };

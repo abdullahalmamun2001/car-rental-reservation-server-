@@ -4,11 +4,7 @@ import { TBooking } from "./booking.interface";
 
 
 const bookingSchema = new Schema<TBooking>({
-  date: {
-    type: Date,
-    default:Date.now,
-    required: true
-  },
+  date: String,
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
@@ -26,18 +22,19 @@ const bookingSchema = new Schema<TBooking>({
   endTime: {
     type: String,
     default: null,
-    required: true
+   
   },
   totalCost: {
     type: Number,
-    required: true
+    default:0,
+  
   },
-  isBooked: {
-    type: String,
-    enum : ['confirmed',"unconfirmed"],
-    default:"unconfirmed",
-    required: true
-  }
+  // isBooked: {
+  //   type: String,
+  //   enum : ['confirmed',"unconfirmed"],
+  //   default:"confirmed",
+  //   required: true
+  // }
 }, {
   timestamps: true 
 });

@@ -1,7 +1,11 @@
 import { Router } from 'express';
 import { validateRequest } from '../../middleware/validateRequest';
 import { UserSchemaWithZod } from './user.validation';
-import { createUserController, createUserLoginController } from './user.controller';
+import {
+  createUserController,
+  createUserLoginController,
+  getAllUserController,
+} from './user.controller';
 
 const router = Router();
 
@@ -10,9 +14,6 @@ router.post(
   validateRequest(UserSchemaWithZod),
   createUserController,
 );
-router.post(
-  '/signin',
-  createUserLoginController
-  
-);
+router.post('/signin', createUserLoginController);
+router.get('/all-user', getAllUserController);
 export const userRoute = router;

@@ -1,3 +1,4 @@
+import  jwt  from 'jsonwebtoken';
 import httpStatus from 'http-status';
 import { catchAsync } from '../../utils/catchAsync';
 import { sendResponse } from '../../utils/sendResponse';
@@ -8,6 +9,7 @@ import {
   updateSingleCarServices,
   deleteSingleCarServices,
 } from './car.service';
+import config from '../../config';
 
 export const createCarController = catchAsync(async (req, res) => {
   const carData = req.body;
@@ -39,6 +41,7 @@ export const getSingleCarCarController = catchAsync(async (req, res) => {
   });
 });
 export const updateSingleCarCarController = catchAsync(async (req, res) => {
+  console.log(req.headers.authorization);
   const id = req.params.id;
   const data = req.body;
   const result = await updateSingleCarServices(id, data);

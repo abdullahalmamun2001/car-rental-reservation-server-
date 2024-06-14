@@ -22,9 +22,4 @@ router.post(
 // auth(USER_Role.user,USER_Role.admin),
 router.get('/', auth(USER_Role.admin), getAllBookingController);
 
-// router.get(
-//   '/my-booking',
-//   myBookingServicesController,
-// );
-
 export const bookingRoute = router;

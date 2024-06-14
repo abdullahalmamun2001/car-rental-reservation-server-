@@ -12,6 +12,7 @@ app.use(cors());
 
 // application routes
 app.use('/api/', router);
+
 app.use(globalErrorHandler);
 // for not fount api
 app.use(notFound);

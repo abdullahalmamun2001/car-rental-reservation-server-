@@ -6,6 +6,7 @@ import {
   createUserLoginController,
   getAllUserController,
 } from './user.controller';
+import { verifyToken } from '../../middleware/auth';
 
 const router = Router();
 
@@ -15,5 +16,5 @@ router.post(
   createUserController,
 );
 router.post('/signin', createUserLoginController);
-router.get('/all-user', getAllUserController);
+router.get('/all-user',verifyToken(), getAllUserController);
 export const userRoute = router;

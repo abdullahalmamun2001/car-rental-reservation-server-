@@ -1,3 +1,4 @@
+
 /* eslint-disable no-undef */
 import httpStatus, { BAD_REQUEST, NOT_FOUND } from 'http-status';
 import { catchAsync } from '../../utils/catchAsync';
@@ -5,7 +6,7 @@ import { sendResponse } from '../../utils/sendResponse';
 import {
   createBookingServices,
   getAllBookingServices,
-  bookingService,
+  getUsersBooking 
 } from './bookling.services';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../../config';
@@ -14,7 +15,15 @@ import { User } from '../User/user.model';
 
 export const createBookingController = catchAsync(async (req, res) => {
   const bookingData = req.body;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const obj :any = {
+    car:req.body.carId,
+    date:bookingData.date,
+    startTime:bookingData.startTime
+  }
+  // console.log(obj);
   const token = req.headers.authorization;
+  // console.log(token);
   if (!token) {
     throw new AppError(NOT_FOUND, 'You have no access to this route');
   }
@@ -30,8 +39,8 @@ export const createBookingController = catchAsync(async (req, res) => {
     throw new AppError(NOT_FOUND, 'user not found');
   }
 
-  bookingData.user = userDoc._id;
-  const result = await createBookingServices(bookingData);
+  obj.user = userDoc._id;
+  const result = await createBookingServices(obj);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -43,15 +52,15 @@ export const createBookingController = catchAsync(async (req, res) => {
 
 export type queryObj = { carId?: string; date?: string; isBooked?: string };
 export const getAllBookingController = catchAsync(async (req, res) => {
-  const { carId, date, isBooked } = req.query as {
-    carId?: string;
+  const { car, date, isBooked } = req.query as {
+    car?: string;
     date?: string;
     isBooked?: string;
   };
 
   const query: queryObj = {};
 
-  if (carId) query.carId = carId;
+  if (car) query.carId = car;
   if (date) query.date = date;
   if (isBooked) query.isBooked = isBooked;
 
@@ -80,7 +89,7 @@ export const getUsersBookingController = catchAsync(async (req, res) => {
     throw new AppError(httpStatus.NOT_FOUND, 'User not found');
   }
 
-  const result = await bookingService.getUsersBooking(user?._id);
+  const result = await getUsersBooking(user?._id);
 
   if (!result || result.length === 0) {
     res.status(httpStatus.NOT_FOUND).json({

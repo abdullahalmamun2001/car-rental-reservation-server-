@@ -3,8 +3,6 @@ import { AppError } from '../../errors/AppError';
 import { Booking } from '../Booking/booking.model';
 import { TCar, TReturn } from './car.interface';
 import { Car } from './car.model';
-import mongoose from 'mongoose';
-const ObjectId = mongoose.Types.ObjectId;
 
 export const createCarServices = async (payload: TCar) => {
   const result = await Car.create(payload);
@@ -37,22 +35,34 @@ export const deleteSingleCarServices = async (id: string) => {
   return result;
 };
 
-export const carReturn = async (payload:TReturn) => {
+export const carReturn = async (payload: TReturn) => {
   const { bookingId, endTime } = payload;
-  console.log(bookingId,endTime);
-  const BookingData = await Booking.findById(bookingId)
-    .populate('car')
-    .populate('user');
-    console.log(BookingData);
+  const BookingData = await Booking.findById(bookingId).populate('car user');
   if (!BookingData) {
     throw new AppError(httpStatus.BAD_REQUEST, 'This Booking is not found');
   }
+  // console.log({line:45,BookingData,BData:'333'});
+  const carData = await Car.findOne({ _id: BookingData.car });
+  // console.log(BookingData.car);
+  // console.log(carData.pricePerHour);
+  if (!carData) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'This Booking is not found');
+  }
+  const { pricePerHour } = carData;
+  if (pricePerHour == null || pricePerHour == undefined) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Give Price per Hour');
+  }
   const { startTime } = BookingData;
-  const { pricePerHour } = BookingData.car;
   const startTimeR = new Date(`1999-01-01T${startTime}`);
   const endTimeS = new Date(`1999-01-01T${endTime}`);
   const startTimeNumber = Number(startTimeR);
   const endTimeNumber = Number(endTimeS);
+  if (startTimeNumber > endTimeNumber) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      'End Time must be gather Then Start Time',
+    );
+  }
   const rantHours = endTimeNumber - startTimeNumber;
   const rantHoursDistance = rantHours / 3600000;
   const rantHoursMoney = rantHoursDistance * pricePerHour;
@@ -60,10 +70,7 @@ export const carReturn = async (payload:TReturn) => {
     bookingId,
     { endTime, totalCost: rantHoursMoney },
     { new: true, upsert: true },
-  )
-    .populate('car')
-    .populate('user');
+  ).populate('car user');
 
   return result;
 };
-

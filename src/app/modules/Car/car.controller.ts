@@ -1,4 +1,3 @@
-
 import httpStatus from 'http-status';
 import { catchAsync } from '../../utils/catchAsync';
 import { sendResponse } from '../../utils/sendResponse';
@@ -10,7 +9,6 @@ import {
   deleteSingleCarServices,
   carReturn,
 } from './car.service';
-
 
 export const createCarController = catchAsync(async (req, res) => {
   const carData = req.body;
@@ -42,7 +40,7 @@ export const getSingleCarCarController = catchAsync(async (req, res) => {
   });
 });
 export const updateSingleCarCarController = catchAsync(async (req, res) => {
-  console.log('mamun');
+ if(req.path !=="/return"){
   const id = req.params.id;
   const data = req.body;
   const result = await updateSingleCarServices(id, data);
@@ -52,6 +50,7 @@ export const updateSingleCarCarController = catchAsync(async (req, res) => {
     message: 'Car updated successfully',
     data: result,
   });
+ }
 });
 export const deleteSingleCarCarController = catchAsync(async (req, res) => {
   const id = req.params.id;
@@ -64,12 +63,25 @@ export const deleteSingleCarCarController = catchAsync(async (req, res) => {
   });
 });
 export const returnBookingController = catchAsync(async (req, res) => {
-  const data = req.body;
-  const result = await carReturn(data);
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'Bookings Return successfully',
-    data: result,
-  });
+  const path=req.path =='/return';
+  if (path) {
+    const data = req.body;
+    const result = await carReturn(data);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Bookings Return successfully',
+      data: result,
+    });
+  }else{
+    const id = req.params.id;
+    const data = req.body;
+    const result = await updateSingleCarServices(id, data);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Car updated successfully',
+      data: result,
+    });
+  }
 });

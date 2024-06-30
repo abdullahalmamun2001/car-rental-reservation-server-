@@ -12,7 +12,7 @@ import { auth, authUser } from '../../middleware/auth';
 import { USER_Role } from '../User/user.constanat';
 
 const router = Router();
-router.get('/my-booking',authUser(USER_Role.user), getUsersBookingController);
+router.get('/my-bookings',authUser(USER_Role.user), getUsersBookingController);
 router.post(
   '/',
   validateRequest(BookingSchemaWithZod),

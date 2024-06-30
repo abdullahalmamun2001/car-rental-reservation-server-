@@ -52,15 +52,15 @@ export const createBookingController = catchAsync(async (req, res) => {
 
 export type queryObj = { carId?: string; date?: string; isBooked?: string };
 export const getAllBookingController = catchAsync(async (req, res) => {
-  const { car, date, isBooked } = req.query as {
-    car?: string;
+  const { carId, date, isBooked } = req.query as {
+    carId?: string;
     date?: string;
     isBooked?: string;
   };
 
   const query: queryObj = {};
 
-  if (car) query.carId = car;
+  if (carId) query.carId = car;
   if (date) query.date = date;
   if (isBooked) query.isBooked = isBooked;
 
@@ -76,7 +76,7 @@ export const getAllBookingController = catchAsync(async (req, res) => {
 export const getUsersBookingController = catchAsync(async (req, res) => {
   const userToken = req.headers.authorization?.split(' ')[1];
   if (!userToken) {
-    throw new AppError(BAD_REQUEST, 'token in non valid');
+    throw new AppError(BAD_REQUEST, 'token in not valid');
   }
 
   const decoded = jwt.verify(

@@ -63,9 +63,16 @@ export const carReturn = async (payload: TReturn) => {
       'End Time must be gather Then Start Time',
     );
   }
+
   const rantHours = endTimeNumber - startTimeNumber;
   const rantHoursDistance = rantHours / 3600000;
   const rantHoursMoney = rantHoursDistance * pricePerHour;
+  if (rantHoursMoney < 0) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      'End Time must be gather Then Start Time',
+    );
+  }
   const result = await Booking.findByIdAndUpdate(
     bookingId,
     { endTime, totalCost: rantHoursMoney },
